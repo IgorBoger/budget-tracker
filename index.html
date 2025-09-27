@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Budget & Expense Tracker (MVP)</title>
+    <link rel="icon" href="./img/favicon.png" type="image/png">
+
+    <link rel="stylesheet" href="./style.css" />
+    <!-- Chart.js für das Diagramm -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+</head>
+
+<body>
+    <header class="container">
+        <h1>Budget & Expense Tracker</h1>
+        <p class="muted">Einfach Einnahmen & Ausgaben verwalten – lokal gespeichert.</p>
+    </header>
+
+    <main class="container grid">
+        <!-- Eingabeformular -->
+        <section class="card">
+            <h2>Neuer Eintrag</h2>
+            <form id="entry-form">
+                <div class="row">
+                    <label>Art</label>
+                    <select id="type" required>
+                        <option value="income">Einnahme</option>
+                        <option value="expense">Ausgabe</option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <label>Betrag (€)</label>
+                    <input id="amount" type="number" step="0.01" min="0" placeholder="0.00" required />
+                </div>
+
+                <div class="row">
+                    <label>Kategorie</label>
+                    <input id="category" type="text" placeholder="z. B. Miete, Essen, Gehalt" required />
+                </div>
+
+                <div class="row">
+                    <label>Datum</label>
+                    <input id="date" type="date" required />
+                </div>
+
+                <div class="row">
+                    <label>Notiz (optional)</label>
+                    <input id="note" type="text" placeholder="Beschreibung (optional)" />
+                </div>
+
+                <button class="btn" type="submit">Speichern</button>
+            </form>
+        </section>
+
+        <!-- Übersicht -->
+        <section class="card">
+            <h2>Übersicht</h2>
+            <div class="summary">
+                <div>
+                    <div class="muted">Einnahmen</div>
+                    <div id="sum-income" class="kpi positive">€ 0,00</div>
+                </div>
+                <div>
+                    <div class="muted">Ausgaben</div>
+                    <div id="sum-expense" class="kpi negative">€ 0,00</div>
+                </div>
+                <div>
+                    <div class="muted">Saldo</div>
+                    <div id="sum-balance" class="kpi">€ 0,00</div>
+                </div>
+            </div>
+            <canvas id="chart" height="120"></canvas>
+        </section>
+
+        <!-- Tabelle -->
+        <section class="card">
+            <h2>Einträge</h2>
+            <div class="table-wrap">
+                <table id="entries-table">
+                    <thead>
+                        <tr>
+                            <th>Datum</th>
+                            <th>Art</th>
+                            <th>Kategorie</th>
+                            <th class="right">Betrag</th>
+                            <th>Notiz</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="entries-tbody">
+                        <!-- JS rendert hier -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="toolbar">
+                <button id="export-csv" class="btn ghost">Als CSV exportieren</button>
+                <button id="clear-all" class="btn danger">Alles löschen</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="container muted center">
+        <!-- <small>Lokale Speicherung via <code>localStorage</code>. Später: Login & Cloud-Sync mit Firebase.</small> -->
+    </footer>
+
+    <!-- <script src="./script.js"></script> -->
+</body>
+
+</html>
