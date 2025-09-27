@@ -71,6 +71,17 @@ function renderTable() {
         const tdActions = document.createElement("td");
         tdActions.className = "row-actions";
 
+        const del = document.createElement("button");
+        del.className = "icon-btn";
+        del.textContent = "Löschen";
+        del.addEventListener("click", () => {
+            entries = entries.filter(x => x.id !== e.id);
+            saveEntries();
+            render();
+        });
+        tdActions.appendChild(del);
+
+
         tr.append(tdDate, tdType, tdCat, tdAmt, tdNote, tdActions);
         tbody.appendChild(tr);
     }
