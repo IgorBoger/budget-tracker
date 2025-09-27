@@ -150,3 +150,24 @@ form.addEventListener("submit", (e) => {
     dateEl.valueAsDate = new Date();
     render();
 });
+
+
+// ===== CSV Export =====
+function toCSV(rows) {
+    const header = ["id", "type", "amount", "category", "date", "note"];
+    const esc = (v = "") => `"${String(v).replaceAll('"', '""')}"`;
+    const body = rows.map(r => header.map(k => esc(r[k])).join(",")).join("\n");
+    return header.join(",") + "\n" + body;
+}
+
+const exportBtn = byId("export-csv");
+exportBtn.addEventListener("click", () => {
+    const csv = toCSV(entries);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `budget-entries-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+});
