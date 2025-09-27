@@ -45,7 +45,36 @@ function renderTable() {
         tbody.appendChild(tr);
         return;
     }
-    // (noch kein Zeilen-Rendern in Slice 1)
+
+    for (const e of entries) {
+        const tr = document.createElement("tr");
+
+        const tdDate = document.createElement("td");
+        tdDate.textContent = formatDate(e.date);
+
+        const tdType = document.createElement("td");
+        const tag = document.createElement("span");
+        tag.className = `tag ${e.type}`;
+        tag.textContent = e.type === "income" ? "Einnahme" : "Ausgabe";
+        tdType.appendChild(tag);
+
+        const tdCat = document.createElement("td");
+        tdCat.textContent = e.category;
+
+        const tdAmt = document.createElement("td");
+        tdAmt.className = "right";
+        tdAmt.textContent = (e.type === "income" ? "+" : "−") + " " + EUR(e.amount);
+
+        const tdNote = document.createElement("td");
+        tdNote.textContent = e.note || "";
+
+        const tdActions = document.createElement("td");
+        tdActions.className = "row-actions";
+
+        tr.append(tdDate, tdType, tdCat, tdAmt, tdNote, tdActions);
+        tbody.appendChild(tr);
+    }
+
 }
 
 function formatDate(iso) {
@@ -72,3 +101,41 @@ function render() {
 }
 
 render();
+
+
+// ===== Events =====
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const type = typeEl.value; // income | expense
+    const amount = parseFloat(amountEl.value);
+    const category = categoryEl.value.trim();
+    const date = dateEl.value;
+    const note = noteEl.value.trim();
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+        alert("Bitte einen gültigen Betrag > 0 eingeben.");
+        return;
+    }
+    if (!category) {
+        alert("Bitte Kategorie angeben.");
+        return;
+    }
+    if (!date) {
+        alert("Bitte Datum wählen.");
+        return;
+    }
+
+    const entry = {
+        id: crypto.randomUUID(),
+        type,
+        amount: Number(amount.toFixed(2)),
+        category,
+        date,  // ISO yyyy-mm-dd
+        note
+    };
+    entries.unshift(entry);
+    saveEntries();
+    form.reset();
+    dateEl.valueAsDate = new Date();
+    render();
+});
