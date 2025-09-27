@@ -8,11 +8,10 @@
     <link rel="icon" href="./img/favicon.png" type="image/png">
 
     <link rel="stylesheet" href="./style.css" />
-    <!-- Chart.js für das Diagramm -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+
 </head>
 
-<body>
+<body onload="render()">
     <header class="container">
         <h1>Budget & Expense Tracker</h1>
         <p class="muted">Einfach Einnahmen & Ausgaben verwalten – lokal gespeichert.</p>
@@ -72,7 +71,7 @@
                     <div id="sum-balance" class="kpi">€ 0,00</div>
                 </div>
             </div>
-            <canvas id="chart" height="120"></canvas>
+            <canvas id="chart"></canvas>
         </section>
 
         <!-- Tabelle -->
@@ -106,6 +105,9 @@
         <!-- <small>Lokale Speicherung via <code>localStorage</code>. Später: Login & Cloud-Sync mit Firebase.</small> -->
     </footer>
 
+
+    <!-- Chart.js für das Diagramm -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./script.js"></script>
 </body>
 

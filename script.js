@@ -2,6 +2,8 @@
 const EUR = (n) => n.toLocaleString("de-DE", { style: "currency", currency: "EUR" });
 const byId = (id) => document.getElementById(id);
 
+let chart;
+
 // ===== State (localStorage) =====
 const KEY = "bt.entries.v1";
 let entries = loadEntries();
@@ -109,9 +111,11 @@ function renderSummary() {
 function render() {
     renderTable();
     renderSummary();
+    // renderChart();
+    if (typeof Chart !== "undefined" && document.getElementById("chart")) {
+        renderChart();
+    }
 }
-
-render();
 
 
 // ===== Events =====
@@ -183,3 +187,53 @@ clearBtn.addEventListener("click", () => {
     saveEntries();
     render();
 });
+
+
+function renderChart() {
+    const byCat = new Map();
+    for (const e of entries.filter(e => e.type === "expense")) {
+        byCat.set(e.category, (byCat.get(e.category) || 0) + e.amount);
+    }
+    const labels = Array.from(byCat.keys());
+    const data = Array.from(byCat.values());
+
+    const canvas = document.getElementById("chart");
+
+    // ⛔️ Nichts rendern, wenn keine Ausgaben vorhanden sind
+    if (data.length === 0) {
+        if (chart) { chart.destroy(); chart = null; }
+        // optional: Canvas optisch ausblenden, damit kein „leerer“ Bereich bleibt:
+        canvas.style.display = "none";
+        return;
+    } else {
+        canvas.style.display = "block";
+    }
+
+    const ctx = canvas;
+    if (!chart) {
+        chart = new Chart(ctx, {
+            type: "bar",
+            data: { labels, datasets: [{ label: "Ausgaben nach Kategorie", data }] },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false, // schon vorhanden
+                resizeDelay: 150,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { callback: (v) => EUR(v) }
+                    }
+                },
+                plugins: {
+                    legend: { display: true },
+                    tooltip: { callbacks: { label: (ctx) => " " + EUR(ctx.parsed.y) } }
+                }
+            }
+        });
+    } else {
+        chart.data.labels = labels;
+        chart.data.datasets[0].data = data;
+        chart.update('none'); // schon vorhanden
+    }
+}

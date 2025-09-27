@@ -147,6 +147,17 @@ select:focus {
     color: var(--negative);
 }
 
+
+/* Fix: Chart-Canvas stabilisieren (verhindert Resize-Loops) */
+#chart {
+    display: block;
+    height: 260px !important;
+    /* feste Höhe gegen endlose Vergrößerung */
+    max-height: 260px !important;
+    width: 100% !important;
+}
+
+
 .table-wrap {
     overflow: auto;
     border: 1px solid var(--border);
