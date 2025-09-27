@@ -171,3 +171,15 @@ exportBtn.addEventListener("click", () => {
     a.click();
     URL.revokeObjectURL(url);
 });
+
+
+
+const clearBtn = byId("clear-all");
+clearBtn.addEventListener("click", () => {
+    if (!entries.length) return;
+    const ok = confirm("Wirklich alle Einträge löschen?");
+    if (!ok) return;
+    entries = [];
+    saveEntries();
+    render();
+});
